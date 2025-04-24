@@ -5,13 +5,15 @@ import {
   HttpCode,
   Param,
   ParseBoolPipe,
-  ParseIntPipe, Patch,
+  ParseIntPipe,
+  Patch,
   Post,
   Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createPropertyDto';
+import { IdParamDto } from './dto/idParam.dto';
 
 @Controller('property')
 export class PropertyController {
@@ -24,27 +26,30 @@ export class PropertyController {
   // forbidNonWhitelisted is to disable extra fields
   // groups is for validations when it has been set up on the Dto attribute
 
-
-
   @Post()
-  @UsePipes(
+  /*@UsePipes(
     new ValidationPipe({
-      whitelist: true ,
+      whitelist: true,
       forbidNonWhitelisted: true,
-      groups : ['create'],
-    })
-  )
+      groups: ['create'],
+    }),
+  )*/
   @HttpCode(200)
-  create(@Body() body: CreatePropertyDto) {
+  create(
+    @Body(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        groups: ['create'],
+      }),
+    )
+    body: CreatePropertyDto,
+  ) {
     return body;
   }
 
   @Get(':id')
-  findOne(
-    @Param('id', ParseIntPipe) id,
-    @Query('req', ParseBoolPipe) req,
-
-  ) {
+  findOne(@Param('id', ParseIntPipe) id, @Query('req', ParseBoolPipe) req) {
     console.log(typeof id, typeof req);
     return id;
   }
@@ -56,16 +61,10 @@ export class PropertyController {
 
   //always : true is used when any attribute of the Dto hasn't the required group
   @Patch(':id')
-  @UsePipes(
-    new ValidationPipe({
-      whitelist: true ,
-      forbidNonWhitelisted: true,
-      groups : ['update'],
-      always : true
-    })
-  )
-
-  update(@Body() body: CreatePropertyDto) {
+  update(
+    @Param() param : IdParamDto,
+    @Body() body: CreatePropertyDto
+  ) {
     return body;
   }
 }
