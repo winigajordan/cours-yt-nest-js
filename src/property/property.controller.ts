@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createPropertyDto';
 import { IdParamDto } from './dto/idParam.dto';
+import { ParseIdPipe } from './pipes/parseIdPipes';
 
 @Controller('property')
 export class PropertyController {
@@ -62,7 +63,7 @@ export class PropertyController {
   //always : true is used when any attribute of the Dto hasn't the required group
   @Patch(':id')
   update(
-    @Param() param : IdParamDto,
+    @Param('id', ParseIdPipe) id,
     @Body() body: CreatePropertyDto
   ) {
     return body;
