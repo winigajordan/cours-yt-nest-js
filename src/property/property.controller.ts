@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
   Param,
   ParseBoolPipe,
   ParseIntPipe,
@@ -10,13 +9,14 @@ import {
   Post,
   Query,
   UsePipes,
-  ValidationPipe,
+  Headers, ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createPropertyDto';
-import { IdParamDto } from './dto/idParam.dto';
 import { ParseIdPipe } from './pipes/parseIdPipes';
 import { createPropertySchema, CreatePropertyZodDto } from './dto/createPropertyZod.dto';
 import { ZodValidationPipe } from './pipes/zodValidationPipe';
+import { HeadersDto } from './dto/headers.dto';
+import { RequestHeader } from './pipes/request-header';
 
 @Controller('property')
 export class PropertyController {
@@ -68,11 +68,15 @@ export class PropertyController {
   }
 
   //always : true is used when any attribute of the Dto hasn't the required group
+  // @Headers() is to have all header's attribute
   @Patch(':id')
   update(
     @Param('id', ParseIdPipe) id,
-    @Body() body: CreatePropertyDto
+    @Body() body: CreatePropertyDto,
+   @RequestHeader(new ValidationPipe({whitelist: true, validateCustomDecorators : true})) headers : HeadersDto,
+    //@Headers() headers,
+
   ) {
-    return body;
+    return headers;
   }
 }
