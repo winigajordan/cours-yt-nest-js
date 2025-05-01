@@ -9,7 +9,7 @@ import {
   Post,
   Query,
   UsePipes,
-  Headers, ValidationPipe,
+ ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createPropertyDto';
 import { ParseIdPipe } from './pipes/parseIdPipes';
@@ -17,12 +17,21 @@ import { createPropertySchema, CreatePropertyZodDto } from './dto/createProperty
 import { ZodValidationPipe } from './pipes/zodValidationPipe';
 import { HeadersDto } from './dto/headers.dto';
 import { RequestHeader } from './pipes/request-header';
+import { PropertyService } from './property.service';
 
 @Controller('property')
 export class PropertyController {
+
+
+
+  constructor(private propertyService: PropertyService  ) {
+
+  }
+
+
   @Get()
   findAll() {
-    return 'All Properties';
+   return this.propertyService.findAll();
   }
 
   // whitelist is to remove extra fields
@@ -53,13 +62,15 @@ export class PropertyController {
     )
     body: CreatePropertyZodDto,
   ) {
-    return body;
+
+    return this.propertyService.create()
+    //return body;
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id, @Query('req', ParseBoolPipe) req) {
-    console.log(typeof id, typeof req);
-    return id;
+    //console.log(typeof id, typeof req);
+    return this.propertyService.findOne()
   }
 
   @Get(':id/:name')
@@ -77,6 +88,7 @@ export class PropertyController {
     //@Headers() headers,
 
   ) {
-    return headers;
+   // return headers;
+    return this.propertyService.update()
   }
 }
