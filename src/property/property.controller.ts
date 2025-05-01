@@ -15,6 +15,8 @@ import {
 import { CreatePropertyDto } from './dto/createPropertyDto';
 import { IdParamDto } from './dto/idParam.dto';
 import { ParseIdPipe } from './pipes/parseIdPipes';
+import { createPropertySchema, CreatePropertyZodDto } from './dto/createPropertyZod.dto';
+import { ZodValidationPipe } from './pipes/zodValidationPipe';
 
 @Controller('property')
 export class PropertyController {
@@ -35,16 +37,21 @@ export class PropertyController {
       groups: ['create'],
     }),
   )*/
-  @HttpCode(200)
+  //@HttpCode(200)
+  @UsePipes(new ZodValidationPipe(createPropertySchema))
   create(
     @Body(
+      /*
       new ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,
         groups: ['create'],
       }),
+
+       */
+
     )
-    body: CreatePropertyDto,
+    body: CreatePropertyZodDto,
   ) {
     return body;
   }
