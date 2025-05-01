@@ -12,5 +12,5 @@ export class CreatePropertyDto {
   description : string;
 
   @IsInt({groups :  ['update', 'create']})
-  area : number;
+  price : number;
 }
