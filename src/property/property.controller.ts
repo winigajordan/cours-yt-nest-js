@@ -5,7 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Patch,
-  Post,
+  Post, Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createPropertyDto';
@@ -14,6 +14,7 @@ import { HeadersDto } from './dto/headers.dto';
 import { RequestHeader } from './pipes/request-header';
 import { PropertyService } from './property.service';
 import { UpdatePropertyDto } from './dto/updateProperty.dto';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Controller('property')
 export class PropertyController {
@@ -26,8 +27,8 @@ export class PropertyController {
 
 
   @Get()
-  findAll() {
-   return this.propertyService.findAll();
+  findAll(@Query()pagindationDto : PaginationDto) {
+   return this.propertyService.findAll(pagindationDto);
   }
 
   // whitelist is to remove extra fields
