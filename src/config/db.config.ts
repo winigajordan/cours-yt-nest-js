@@ -11,6 +11,3 @@ export default  registerAs("dbconfig.dev", () : PostgresConnectionOptions => ({
   }
 
 ))
-
-
-

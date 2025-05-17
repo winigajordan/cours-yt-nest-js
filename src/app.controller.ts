@@ -8,7 +8,7 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return this.config.get("dbconfig.dev.type")!;
-    //return this.appService.getHello();
+    //return this.config.get("dbconfig.dev.type")!;
+    return this.appService.getHello();
   }
 }
